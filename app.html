@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>AR com Modelo GLB Personalizado</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body, html {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+
+    #camera-stream {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    #app {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      height: 100%;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 80vh;
+      margin-top: 20px;
+    }
+
+    h2 {
+      color: white;
+      text-shadow: 0 0 5px black;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Fundo com câmera -->
+  <video id="camera-stream" autoplay playsinline muted></video>
+
+  <div id="app">
+    <h2>Envie seu arquivo .glb</h2>
+    <input type="file" id="upload" accept=".glb" />
+
+    <model-viewer
+      id="viewer"
+      src=""
+      alt="Modelo 3D"
+      ar
+      ar-modes="scene-viewer webxr quick-look"
+      camera-controls
+      auto-rotate
+      exposure="1"
+      shadow-intensity="1"
+      environment-image="neutral"
+      style="display: none;"
+    ></model-viewer>
+  </div>
+
+  <script>
+    // Ativar câmera como fundo
+    const video = document.getElementById('camera-stream');
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        console.error("Erro ao acessar câmera:", err);
+        alert("Não foi possível acessar a câmera.");
+      });
+
+    // Upload de GLB
+    const upload = document.getElementById('upload');
+    const viewer = document.getElementById('viewer');
+
+    upload.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (!file || !file.name.endsWith('.glb')) {
+        alert("Por favor, envie um arquivo .glb válido.");
+        return;
+      }
+
+      const url = URL.createObjectURL(file);
+      viewer.src = url;
+      viewer.style.display = 'block';
+
+      alert("Clique no ícone de AR para ver no ambiente!");
+    });
+  </script>
+
+</body>
+
+</html>
