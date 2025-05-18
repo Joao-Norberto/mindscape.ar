@@ -21,8 +21,10 @@ def mirror_contour(contour, axis='vertical'):
     return np.array(mirrored, dtype=np.int32)
 
 # === Carregar imagem ===
-path = r'C:\Users\Carlo\Desktop\Mestrado\TCC\curvas_de_nivel2.png'
+#'C:\Users\Carlo\Desktop\Mestrado\TCC\curvas_de_nivel2.png'
+path = r'C:\Users\joaop\Downloads\personal-downloads\curvas_de_nivel2.png'
 img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+
 if img is None:
     print("❌ Erro: Imagem não encontrada.")
     exit()
@@ -154,5 +156,5 @@ mesh = trimesh.Trimesh(vertices=vertices, faces=faces)
 mesh.visual.vertex_colors = np.array(colors) * 255  # Normalizando para valores de 0 a 255
 
 # Exportar o modelo 3D como um arquivo .glb com as cores
-mesh.export("modelo_terreno_com_cores.glb")
+mesh.export("modelo_terreno_com_cores_2.glb")
 print("✅ Modelo 3D exportado como 'modelo_terreno_com_cores.glb'")

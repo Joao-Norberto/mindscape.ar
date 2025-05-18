@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>AR com Modelo GLB Personalizado</title>
+  <title>Mindscape AR - Modelo 3D</title>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -11,7 +11,7 @@
       height: 100%;
       width: 100%;
       overflow: hidden;
-      font-family: sans-serif;
+      font-family: 'Arial', sans-serif;
     }
 
     #camera-stream {
@@ -28,19 +28,63 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       padding: 20px;
       height: 100%;
+      background: linear-gradient(135deg, rgba(0, 204, 255, 0.1), rgba(255, 182, 193, 0.1)); /* Gradient moderno */
+    }
+
+    h2 {
+      color: white;
+      text-shadow: 0 0 5px black;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .logo {
+      width: 100px;
+      margin-bottom: 10px;
+    }
+
+    .title {
+      font-size: 30px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 0 5px black;
+      margin-bottom: 15px;
+    }
+
+    .upload-section {
+      margin-bottom: 20px;
     }
 
     model-viewer {
       width: 100%;
       height: 80vh;
       margin-top: 20px;
+      border-radius: 15px; /* Bordas arredondadas para um visual moderno */
     }
 
-    h2 {
+    button {
+      background-color: #00ccff;
       color: white;
-      text-shadow: 0 0 5px black;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #0088cc;
+    }
+
+    .footer {
+      margin-top: 20px;
+      color: white;
+      text-align: center;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -51,9 +95,17 @@
   <video id="camera-stream" autoplay playsinline muted></video>
 
   <div id="app">
-    <h2>Envie seu arquivo .glb</h2>
-    <input type="file" id="upload" accept=".glb" />
+    <!-- Logo Unifesp -->
+    <img src="https://storage.googleapis.com/mindscape-ar/unifesp.png" alt="Unifesp Logo" class="logo" />
 
+    <!-- Título Mindscape AR -->
+    <div class="title">Mindscape AR</div>
+
+    <div class="upload-section">
+      <input type="file" id="upload" accept=".glb" />
+    </div>
+
+    <!-- Modelo 3D -->
     <model-viewer
       id="viewer"
       src=""
@@ -65,8 +117,11 @@
       exposure="1"
       shadow-intensity="1"
       environment-image="neutral"
-      style="display: none;"
+      style="display: none; border-radius: 15px;"
     ></model-viewer>
+
+    <!-- Botão Tirar Foto (sem configuração ainda) -->
+    <button id="take-photo">Tirar Foto</button>
   </div>
 
   <script>
@@ -97,6 +152,11 @@
       viewer.style.display = 'block';
 
       alert("Clique no ícone de AR para ver no ambiente!");
+    });
+
+    // Função "Tirar Foto" (ainda não configurada)
+    document.getElementById('take-photo').addEventListener('click', () => {
+      alert("Funcionalidade de tirar foto será configurada em breve!");
     });
   </script>
 
