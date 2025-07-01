@@ -15,6 +15,10 @@ OUTPUT_FOLDER = 'static/models'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(OUTPUT_FOLDER, exist_ok=True)
 
+@app.route('/')
+def index():
+    return send_from_directory('.', 'app.html')
+
 # Rota principal para upload da imagem PNG
 @app.route('/upload', methods=['POST'])
 def upload_file():

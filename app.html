@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <title>Mindscape AR - Modelo 3D</title>
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -17,7 +18,8 @@
       height: 100%;
       width: 100%;
       overflow: hidden;
-      font-family: 'Arial', sans-serif;
+      font-family: 'Poppins', sans-serif;
+      background-color: #000;
     }
 
     #camera-stream {
@@ -39,30 +41,50 @@
       padding: 20px;
       height: 100%;
       background: linear-gradient(135deg, rgba(0, 204, 255, 0.1), rgba(255, 182, 193, 0.1));
-    }
-
-    h2 {
-      color: white;
-      text-shadow: 0 0 5px black;
-      font-size: 24px;
-      margin-bottom: 20px;
+      text-align: center;
     }
 
     .logo {
-      width: 100px;
+      width: 80px;
       margin-bottom: 10px;
     }
 
     .title {
-      font-size: 30px;
-      font-weight: bold;
+      font-size: 32px;
+      font-weight: 700;
       color: white;
       text-shadow: 0 0 5px black;
       margin-bottom: 15px;
     }
 
+    h2 {
+      font-size: 20px;
+      color: white;
+      margin-bottom: 10px;
+      text-shadow: 0 0 3px black;
+    }
+
     .upload-section {
       margin-bottom: 20px;
+    }
+
+    .hidden-input {
+      display: none;
+    }
+
+    #custom-upload {
+      background-color: #00ccff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    #custom-upload:hover {
+      background-color: #0088cc;
     }
 
     model-viewer {
@@ -72,18 +94,23 @@
       border-radius: 15px;
     }
 
-    button {
+    button,
+    .gallery-buttons a {
       background-color: #00ccff;
       color: white;
       border: none;
       padding: 10px 20px;
       border-radius: 25px;
       cursor: pointer;
-      margin-top: 20px;
-      font-size: 16px;
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background-color 0.3s;
     }
 
-    button:hover {
+    button:hover,
+    .gallery-buttons a:hover {
       background-color: #0088cc;
     }
 
@@ -93,54 +120,240 @@
       text-align: center;
       font-size: 14px;
     }
+
+    .gallery-section {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .gallery-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .camera-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 15px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 28px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked+.slider {
+      background-color: #00ccff;
+    }
+
+    input:checked+.slider:before {
+      transform: translateX(22px);
+    }
+
+    @media screen and (max-width: 600px) {
+      .title {
+        font-size: 24px;
+      }
+
+      h2 {
+        font-size: 16px;
+      }
+
+      model-viewer {
+        height: 60vh;
+      }
+    }
   </style>
 </head>
 
-  <body>
 
-    <!-- Fundo com câmera -->
-    <video id="camera-stream" autoplay playsinline muted></video>
+<body>
 
-    <div id="app">
-      <!-- Logo Unifesp -->
-      <img src="https://storage.googleapis.com/mindscape-ar/unifesp.png" alt="Unifesp Logo" class="logo" />
+  <!-- Fundo com câmera -->
+  <video id="camera-stream" autoplay playsinline muted></video>
 
-      <!-- Título Mindscape AR -->
-      <div class="title">Mindscape AR</div>
+  <div id="app">
+    <!-- Logo Unifesp -->
+    <img src="https://storage.googleapis.com/mindscape-ar/unifesp.png" alt="Unifesp Logo" class="logo" />
 
-      <div class="upload-section">
-        <input type="file" id="upload-png" accept=".png" />
+    <!-- Título Mindscape AR -->
+    <div class="title">Mindscape AR</div>
+
+    <div class="gallery-section">
+      <h2>Imagens de Exemplo</h2>
+      <div class="gallery-buttons">
+        <a href="https://storage.googleapis.com/mindscape-ar/assets/curvas_de_nivel.png" download target="_blank">Imagem
+          1</a>
+        <a href="https://storage.googleapis.com/mindscape-ar/assets/curvas_de_nivel2.png" download
+          target="_blank">Imagem 2</a>
       </div>
-
-      <!-- Modelo 3D -->
-      <model-viewer id="viewer" src="" alt="Modelo 3D" ar ar-modes="scene-viewer webxr quick-look" camera-controls
-        auto-rotate exposure="1" shadow-intensity="1" environment-image="neutral"
-        style="display: none; border-radius: 15px;"></model-viewer>
-
-      <!-- Botão Tirar Foto (futuro) -->
-      <button id="take-photo">Tirar Foto</button>
     </div>
 
-    <script>
-      // Ativar câmera de fundo
-      const video = document.getElementById('camera-stream');
-      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-        .then(stream => {
-          video.srcObject = stream;
-        })
-        .catch(err => {
-          console.error("Erro ao acessar câmera:", err);
-          alert("Não foi possível acessar a câmera.");
+    <div class="upload-section">
+      <input type="file" id="upload-png" class="hidden-input" accept=".png" />
+      <button id="custom-upload">Enviar Imagem</button>
+    </div>
+
+
+    <!-- Modelo 3D -->
+    <model-viewer id="viewer" src="" alt="Modelo 3D" ar ar-modes="scene-viewer webxr quick-look" camera-controls
+      auto-rotate exposure="1" shadow-intensity="1" environment-image="neutral"
+      style="display: none; border-radius: 15px;"></model-viewer>
+
+    <!-- Botão Tirar Foto (futuro) -->
+    <button id="take-photo">Tirar Foto</button>
+
+    <div class="camera-toggle">
+      <label class="switch">
+        <input type="checkbox" id="toggle-camera" checked>
+        <span class="slider round"></span>
+      </label>
+      <span class="switch-label">Câmera Ligada</span>
+    </div>
+  </div>
+
+  <script>
+    const video = document.getElementById('camera-stream');
+    const toggleSwitch = document.getElementById('toggle-camera');
+    const switchLabel = document.querySelector('.switch-label');
+
+    let cameraOn = false;
+    let cameraStream = null;
+
+    // Iniciar câmera
+    async function startCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        video.srcObject = stream;
+        cameraStream = stream;
+        video.style.display = 'block';
+        document.body.style.backgroundColor = 'transparent';
+        
+        cameraOn = true;
+      } catch (err) {
+        console.error("Erro ao acessar câmera:", err);
+        alert("Não foi possível acessar a câmera.");
+      }
+    }
+
+    // Parar câmera
+    function stopCamera() {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => track.stop());
+        video.srcObject = null;
+      }
+      video.style.display = 'none';
+      document.body.style.backgroundColor = '#000'; // cor sólida quando sem câmera
+      toggleBtn.textContent = 'Ligar Câmera';
+      cameraOn = false;
+    }
+
+    // Alternar câmera
+    toggleSwitch.addEventListener('change', () => {
+      if (toggleSwitch.checked) {
+        startCamera();
+        switchLabel.textContent = 'Câmera Ligada';
+      } else {
+        switchLabel.textContent = 'Câmera Desligada';
+        stopCamera();
+      }
+    });
+
+    // Iniciar câmera automaticamente ao carregar
+    startCamera();
+
+    // Upload de PNG
+    document.getElementById('upload-png').addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+      if (!file || !file.name.endsWith('.png')) {
+        alert("Por favor, envie um arquivo .png válido.");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      try {
+        const response = await fetch('http://localhost:5000/upload', {
+          method: 'POST',
+          body: formData
         });
 
-      // Upload de PNG
-      document.getElementById('upload-png').addEventListener('change', async (event) => {
-        const file = event.target.files[0];
-        if (!file || !file.name.endsWith('.png')) {
-          alert("Por favor, envie um arquivo .png válido.");
-          return;
+        const text = await response.text();
+        console.log("Resposta bruta do servidor:", text);
+
+        try {
+          const result = JSON.parse(text);
+          if (response.ok) {
+            const glbUrl = result.model_url;
+            const viewer = document.getElementById('viewer');
+            viewer.src = glbUrl;
+            viewer.style.display = 'block';
+            alert("Modelo carregado! Clique no AR para visualizar.");
+          } else {
+            alert("Erro: " + result.error);
+          }
+        } catch (jsonError) {
+          console.error("Erro ao converter resposta para JSON:", jsonError);
+          alert("Resposta do servidor não está em formato JSON.");
         }
 
+      } catch (error) {
+        console.error("Erro na requisição:", error);
+        alert("Erro ao processar.");
+      }
+    });
+
+    // Tirar foto e enviar automaticamente
+    document.getElementById('take-photo').addEventListener('click', async () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      canvas.toBlob(async (blob) => {
+        const file = new File([blob], 'foto_camera.png', { type: 'image/png' });
         const formData = new FormData();
         formData.append('file', file);
 
@@ -160,7 +373,7 @@
               const viewer = document.getElementById('viewer');
               viewer.src = glbUrl;
               viewer.style.display = 'block';
-              alert("Modelo carregado! Clique no AR para visualizar.");
+              alert("Modelo gerado a partir da câmera!");
             } else {
               alert("Erro: " + result.error);
             }
@@ -171,17 +384,18 @@
 
         } catch (error) {
           console.error("Erro na requisição:", error);
-          alert("Erro ao processar.");
+          alert("Erro ao processar a foto.");
         }
+      }, 'image/png');
+    });
 
-      });
+    // Botão estilizado para abrir input
+    document.getElementById('custom-upload').addEventListener('click', () => {
+      document.getElementById('upload-png').click();
+    });
+  </script>
 
-      // Botão Tirar Foto (ainda não implementado)
-      document.getElementById('take-photo').addEventListener('click', () => {
-        alert("Funcionalidade de tirar foto será configurada em breve!");
-      });
-    </script>
 
-  </body>
+</body>
 
 </html>
