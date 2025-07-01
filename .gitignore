@@ -1,0 +1,22 @@
+# Arquivos de upload
+uploads/*.png
+uploads/*.jpg
+
+# Modelo exportado
+static/models/*.glb
+
+# Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Arquivos temporários
+*.log
+*.tmp
+
+# VSCode configs locais
+.vscode/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
